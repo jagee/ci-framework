@@ -14,10 +14,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-- name: Check for HTTPS in endpoint
-  ansible.builtin.assert:
-    that:
-      - "'https://' in cifmw_cert_verify_endpoint_to_check.URL"
-    success_msg: "{{ cifmw_cert_verify_endpoint_to_check.URL }} is HTTPS"
-    fail_msg: "{{ cifmw_cert_verify_endpoint_to_check.URL }} is not HTTPS"
-  when: '"swift" not in cifmw_cert_verify_endpoint_to_check.URL'
+- name: Run cert_verify OCP CMD
+  environment:
+    KUBECONFIG: "{{ cifmw_openshift_kubeconfig }}"
+    PATH: "{{ cifmw_path }}"
+  ansible.builtin.command:
+    cmd: >-
+      oc exec
+      -n {{ cifmw_cert_verify_run_osp_cmd_namespace }}
+      -t openstackclient
+      --
+      {{ cifmw_federation_run_osp_cmd }}
+  register: cert_verify_run_ocp_cmd

@@ -2,3 +2,4 @@
 # defaults file for cert_verify
 cifmw_cert_verify_check_certs: true
 cifmw_cert_verify_check_endpoints: true
+cifmw_cert_verify_run_osp_cmd_namespace: "openstack"
